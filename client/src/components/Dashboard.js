@@ -20,12 +20,29 @@ const Header = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 3.5rem;
-  background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+  font-size: 4rem;
+  margin-bottom: 3rem;
+  background: linear-gradient(45deg, #ff6b35, #ff9f1c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
-  margin: 0;
+  text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+  letter-spacing: 2px;
+  font-weight: 800;
+  position: relative;
+  text-align: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b35, #ff9f1c);
+    border-radius: 2px;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+  }
 `;
 
 const LogoutButton = styled.button`

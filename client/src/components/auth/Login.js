@@ -1,90 +1,131 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 
 const LoginContainer = styled.div`
-  max-width: 500px;
-  width: 90%;
+  max-width: 600px;
+  min-height: 600px;
   margin: 2rem auto;
-  padding: 3rem;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  padding: 4rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-  min-height: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at center,
-      rgba(64, 224, 208, 0.1) 0%,
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, 
+      rgba(0, 180, 216, 0.1) 0%,
       rgba(0, 0, 0, 0) 70%
     );
-    animation: rotate 20s linear infinite;
+    pointer-events: none;
     z-index: -1;
   }
 
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, 
+      rgba(0, 180, 216, 0.05) 0%,
+      rgba(0, 0, 0, 0) 50%
+    );
+    pointer-events: none;
+    z-index: -1;
   }
 `;
 
-const Title = styled.h2`
-  color: #ffffff;
-  text-align: center;
+const Title = styled.h1`
+  font-size: 4rem;
   margin-bottom: 3rem;
-  font-size: 3rem;
-  background: linear-gradient(90deg, #40e0d0 0%, #64ffda 100%);
+  background: linear-gradient(45deg, #ff6b35, #ff9f1c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(64, 224, 208, 0.3);
+  text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+  letter-spacing: 2px;
+  font-weight: 800;
+  position: relative;
+  text-align: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b35, #ff9f1c);
+    border-radius: 2px;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+  }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  width: 100%;
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 1.2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   border-radius: 12px;
+  padding: 12px 16px;
   font-size: 1.1rem;
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   &:focus {
+    outline: none;
+    border-color: #00b4d8;
+    box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2),
+                0 0 20px rgba(0, 180, 216, 0.1),
+                0 4px 6px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
   }
 `;
 
 const Button = styled.button`
-  padding: 1.2rem;
-  background: linear-gradient(90deg, #40e0d0 0%, #64ffda 100%);
-  color: #0a192f;
-  font-size: 1.2rem;
+  background: #00b4d8;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   margin-top: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  border: none;
+  cursor: pointer;
 
-  &::after {
+  &::before {
     content: '';
     position: absolute;
     top: 0;
@@ -99,16 +140,57 @@ const Button = styled.button`
     transition: transform 0.6s ease;
   }
 
-  &:hover::after {
-    transform: translateX(100%);
+  &:hover {
+    background: #0096c7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 180, 216, 0.3);
+    
+    &::before {
+      transform: translateX(100%);
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 180, 216, 0.3);
   }
 `;
 
 const LinkText = styled.p`
-  text-align: center;
-  margin-top: 2rem;
   color: rgba(255, 255, 255, 0.7);
+  margin-top: 1.5rem;
+  text-align: center;
   font-size: 1rem;
+
+  a {
+    color: #00b4d8;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background: linear-gradient(90deg, #00b4d8, #e94560);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      color: #e94560;
+      text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+
+      &::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+    }
+  }
 `;
 
 const Login = () => {
@@ -121,15 +203,13 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         email,
-        password
+        password,
       });
-
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.userId);
-      toast.success('Login successful!');
+      toast.success('Connexion réussie !');
       navigate('/dashboard');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Login failed');
+      toast.error(error.response?.data?.message || 'Une erreur est survenue');
     }
   };
 
@@ -146,15 +226,15 @@ const Login = () => {
         />
         <Input
           type="password"
-          placeholder="Password"
+          placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <Button type="submit">Login</Button>
+        <Button type="submit">Se connecter</Button>
       </Form>
       <LinkText>
-        Don't have an account? <Link to="/register">Register</Link>
+        Pas encore de compte ? <a href="/register">S'inscrire</a>
       </LinkText>
     </LoginContainer>
   );
