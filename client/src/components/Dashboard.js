@@ -22,7 +22,7 @@ const Header = styled.div`
 
 const Title = styled.h1`
   font-size: 4rem;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   background: linear-gradient(45deg, #ff6b35, #ff9f1c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -43,6 +43,35 @@ const Title = styled.h1`
     background: linear-gradient(90deg, #ff6b35, #ff9f1c);
     border-radius: 2px;
     box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+  }
+`;
+
+const Slogan = styled.p`
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  letter-spacing: 1px;
+  position: relative;
+  padding: 0 2rem;
+
+  &::before, &::after {
+    content: '"';
+    position: absolute;
+    font-size: 3rem;
+    color: rgba(255, 107, 53, 0.3);
+    font-family: serif;
+  }
+
+  &::before {
+    left: 0;
+    top: -1rem;
+  }
+
+  &::after {
+    right: 0;
+    bottom: -2rem;
   }
 `;
 
@@ -124,7 +153,10 @@ const Dashboard = () => {
   return (
     <DashboardContainer>
       <Header>
-        <Title>To Scooby-Do</Title>
+        <div>
+          <Title>To Scooby-Do</Title>
+          <Slogan>Pour ne plus jamais oublier vos Scooby Snacks !</Slogan>
+        </div>
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </Header>
       <Content>

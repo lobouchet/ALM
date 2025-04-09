@@ -10,10 +10,24 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #020715 0%, #07122b 50%, #020715 100%);
+    background-size: 200% 200%;
+    animation: gradientMove 4s ease infinite;
     color: #ffffff;
     line-height: 1.6;
     min-height: 100vh;
@@ -28,12 +42,13 @@ const GlobalStyle = createGlobalStyle`
       width: 100%;
       height: 100%;
       background: linear-gradient(45deg, 
-        rgba(255, 107, 53, 0.08) 0%,
-        rgba(255, 107, 53, 0) 50%,
-        rgba(255, 107, 53, 0.08) 100%
+        rgba(0, 242, 254, 0.25) 0%,
+        rgba(0, 242, 254, 0) 50%,
+        rgba(0, 242, 254, 0.25) 100%
       );
       pointer-events: none;
       z-index: -2;
+      animation: gradientMove 3s ease infinite;
     }
 
     &::after {
@@ -44,12 +59,13 @@ const GlobalStyle = createGlobalStyle`
       width: 100%;
       height: 100%;
       background: linear-gradient(-45deg, 
-        rgba(255, 107, 53, 0.08) 0%,
-        rgba(255, 107, 53, 0) 50%,
-        rgba(255, 107, 53, 0.08) 100%
+        rgba(0, 242, 254, 0.25) 0%,
+        rgba(0, 242, 254, 0) 50%,
+        rgba(0, 242, 254, 0.25) 100%
       );
       pointer-events: none;
       z-index: -2;
+      animation: gradientMove 2s ease infinite;
     }
 
     &::before {
@@ -60,14 +76,15 @@ const GlobalStyle = createGlobalStyle`
       width: 200%;
       height: 200%;
       background: linear-gradient(45deg, 
-        rgba(255, 107, 53, 0.15) 0%,
-        rgba(255, 107, 53, 0) 20%,
-        rgba(255, 107, 53, 0) 80%,
-        rgba(255, 107, 53, 0.15) 100%
+        rgba(0, 242, 254, 0.15) 0%,
+        rgba(0, 242, 254, 0) 20%,
+        rgba(0, 242, 254, 0) 80%,
+        rgba(0, 242, 254, 0.15) 100%
       );
       transform: rotate(45deg);
       pointer-events: none;
       z-index: -1;
+      animation: gradientMove 2.5s ease infinite;
     }
   }
 
