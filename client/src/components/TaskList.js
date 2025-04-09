@@ -23,10 +23,30 @@ const Section = styled.div`
 const SectionTitle = styled.h2`
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  background: linear-gradient(45deg, #00b4d8, #e94560);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 0.5rem;
+  background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+  text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      rgba(0, 242, 254, 0) 0%,
+      rgba(0, 242, 254, 0.8) 50%,
+      rgba(0, 242, 254, 0) 100%
+    );
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+  }
 `;
 
 const TaskGrid = styled.div`
@@ -52,23 +72,63 @@ const TaskCard = styled.div`
 `;
 
 const TaskTitle = styled.h3`
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
   color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 0.5rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #00b4d8, #e94560);
+    border-radius: 2px;
+  }
 `;
 
 const TaskDescription = styled.p`
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 80px;
 `;
 
 const TaskDates = styled.div`
   display: flex;
-  justify-content: space-between;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.8rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
   margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+`;
+
+const DateItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00b4d8;
+  }
 `;
 
 const ButtonGroup = styled.div`
@@ -156,8 +216,8 @@ const TaskList = () => {
     }
   };
 
-  const inProgressTasks = tasks.filter((task) => !task.completed);
-  const completedTasks = tasks.filter((task) => task.completed);
+  const inProgressTasks = tasks.filter((task) => !task.complete);
+  const completedTasks = tasks.filter((task) => task.complete);
 
   return (
     <TaskListContainer>
@@ -169,8 +229,23 @@ const TaskList = () => {
               <TaskTitle>{task.title}</TaskTitle>
               <TaskDescription>{task.description}</TaskDescription>
               <TaskDates>
-                <span>Créée le: {new Date(task.createdAt).toLocaleDateString()}</span>
-                <span>Échéance: {new Date(task.dueDate).toLocaleDateString()}</span>
+                <DateItem>
+                  Créée le {new Date(task.createdAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </DateItem>
+                <DateItem>
+                  Échéance le {new Date(task.date_fin).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })} à {new Date(task.date_fin).toLocaleTimeString('fr-FR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </DateItem>
               </TaskDates>
               <ButtonGroup>
                 <Button className="complete" onClick={() => handleComplete(task._id)}>
@@ -193,8 +268,20 @@ const TaskList = () => {
               <TaskTitle>{task.title}</TaskTitle>
               <TaskDescription>{task.description}</TaskDescription>
               <TaskDates>
-                <span>Créée le: {new Date(task.createdAt).toLocaleDateString()}</span>
-                <span>Terminée le: {new Date(task.completedAt).toLocaleDateString()}</span>
+                <DateItem>
+                  Créée le {new Date(task.createdAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </DateItem>
+                <DateItem>
+                  Terminée le {new Date(task.completedAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </DateItem>
               </TaskDates>
               <ButtonGroup>
                 <Button className="delete" onClick={() => handleDelete(task._id)}>

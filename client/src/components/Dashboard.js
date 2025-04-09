@@ -7,9 +7,10 @@ import TaskList from './TaskList';
 import { toast } from 'react-toastify';
 
 const DashboardContainer = styled.div`
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh;
 `;
 
 const Header = styled.div`
@@ -63,13 +64,27 @@ const LogoutButton = styled.button`
 
 const Content = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 400px 1fr;
   gap: 2rem;
   min-height: 600px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     grid-template-columns: 1fr;
   }
+`;
+
+const FormSection = styled.div`
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+`;
+
+const TasksSection = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const Dashboard = () => {
@@ -113,8 +128,12 @@ const Dashboard = () => {
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </Header>
       <Content>
-        <TaskForm onTaskAdded={fetchTasks} />
-        <TaskList tasks={tasks} onTaskUpdated={fetchTasks} />
+        <FormSection>
+          <TaskForm onTaskAdded={fetchTasks} />
+        </FormSection>
+        <TasksSection>
+          <TaskList tasks={tasks} onTaskUpdated={fetchTasks} />
+        </TasksSection>
       </Content>
     </DashboardContainer>
   );

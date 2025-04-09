@@ -15,10 +15,31 @@ const Form = styled.form`
 const Title = styled.h3`
   color: #ffffff;
   margin-bottom: 1.5rem;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 0.5rem;
   background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      rgba(0, 242, 254, 0) 0%,
+      rgba(0, 242, 254, 0.8) 50%,
+      rgba(0, 242, 254, 0) 100%
+    );
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+  }
 `;
 
 const Label = styled.label`

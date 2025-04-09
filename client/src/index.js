@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background: #0a0a1a;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     color: #ffffff;
     line-height: 1.6;
     min-height: 100vh;
@@ -28,9 +28,9 @@ const GlobalStyle = createGlobalStyle`
       width: 100%;
       height: 100%;
       background: linear-gradient(45deg, 
-        rgba(255, 107, 53, 0.1) 0%,
+        rgba(255, 107, 53, 0.08) 0%,
         rgba(255, 107, 53, 0) 50%,
-        rgba(255, 107, 53, 0.1) 100%
+        rgba(255, 107, 53, 0.08) 100%
       );
       pointer-events: none;
       z-index: -2;
@@ -44,12 +44,30 @@ const GlobalStyle = createGlobalStyle`
       width: 100%;
       height: 100%;
       background: linear-gradient(-45deg, 
-        rgba(255, 107, 53, 0.1) 0%,
+        rgba(255, 107, 53, 0.08) 0%,
         rgba(255, 107, 53, 0) 50%,
-        rgba(255, 107, 53, 0.1) 100%
+        rgba(255, 107, 53, 0.08) 100%
       );
       pointer-events: none;
       z-index: -2;
+    }
+
+    &::before {
+      content: '';
+      position: fixed;
+      bottom: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, 
+        rgba(255, 107, 53, 0.15) 0%,
+        rgba(255, 107, 53, 0) 20%,
+        rgba(255, 107, 53, 0) 80%,
+        rgba(255, 107, 53, 0.15) 100%
+      );
+      transform: rotate(45deg);
+      pointer-events: none;
+      z-index: -1;
     }
   }
 
@@ -84,7 +102,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   input, textarea {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
     border-radius: 12px;
