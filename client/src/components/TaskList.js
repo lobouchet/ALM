@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -7,26 +7,46 @@ const TaskListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const Section = styled.div`
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
   padding: 2rem;
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const SectionTitle = styled.h2`
-  color: #ffffff;
-  margin-bottom: 1.5rem;
   font-size: 1.8rem;
-  background: linear-gradient(90deg, #40e0d0 0%, #64ffda 100%);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 0.5rem;
+  background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(64, 224, 208, 0.3);
-  padding-left: 1rem;
-  border-left: 4px solid #40e0d0;
+  text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+      rgba(0, 242, 254, 0) 0%,
+      rgba(0, 242, 254, 0.8) 50%,
+      rgba(0, 242, 254, 0) 100%
+    );
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+  }
 `;
 
 const TaskGrid = styled.div`
@@ -36,58 +56,79 @@ const TaskGrid = styled.div`
 `;
 
 const TaskCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, 
-      rgba(64, 224, 208, 0.1) 0%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    
-    &::before {
-      opacity: 1;
-    }
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 180, 216, 0.3);
   }
 `;
 
 const TaskTitle = styled.h3`
-  color: #ffffff;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   margin-bottom: 1rem;
-  background: linear-gradient(90deg, #40e0d0 0%, #64ffda 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 0.5rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #00b4d8, #e94560);
+    border-radius: 2px;
+  }
 `;
 
 const TaskDescription = styled.p`
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
   line-height: 1.6;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 80px;
 `;
 
 const TaskDates = styled.div`
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+`;
+
+const DateItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00b4d8;
+  }
 `;
 
 const ButtonGroup = styled.div`
@@ -97,57 +138,68 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 0.8rem 1.2rem;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
-  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
   transition: all 0.3s ease;
   flex: 1;
-  position: relative;
-  overflow: hidden;
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, 
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    transform: translateX(-100%);
-    transition: transform 0.6s ease;
+  &.complete {
+    background: #00b4d8;
+    color: white;
+
+    &:hover {
+      background: #0096c7;
+      transform: translateY(-2px);
+    }
   }
 
-  &:hover::after {
-    transform: translateX(100%);
+  &.delete {
+    background: #e94560;
+    color: white;
+
+    &:hover {
+      background: #d13354;
+      transform: translateY(-2px);
+    }
   }
 `;
 
-const CompleteButton = styled(Button)`
-  background: linear-gradient(90deg, #40e0d0 0%, #64ffda 100%);
-  color: #0a192f;
-`;
+const TaskList = () => {
+  const [tasks, setTasks] = useState([]);
 
-const DeleteButton = styled(Button)`
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-`;
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
-const TaskList = ({ tasks, onTaskUpdated }) => {
+  const fetchTasks = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/api/tasks', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTasks(response.data);
+    } catch (error) {
+      toast.error('Erreur lors du chargement des tâches');
+    }
+  };
+
   const handleComplete = async (taskId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/tasks/${taskId}`, 
-        { complete: true },
-        { headers: { Authorization: `Bearer ${token}` } }
+      await axios.put(
+        `http://localhost:5000/api/tasks/${taskId}/complete`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      toast.success('Task marked as complete!');
-      onTaskUpdated();
+      fetchTasks();
+      toast.success('Tâche marquée comme terminée !');
     } catch (error) {
-      toast.error('Failed to update task');
+      toast.error('Erreur lors de la mise à jour de la tâche');
     }
   };
 
@@ -155,38 +207,53 @@ const TaskList = ({ tasks, onTaskUpdated }) => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success('Task deleted successfully!');
-      onTaskUpdated();
+      fetchTasks();
+      toast.success('Tâche supprimée avec succès !');
     } catch (error) {
-      toast.error('Failed to delete task');
+      toast.error('Erreur lors de la suppression de la tâche');
     }
   };
 
-  const incompleteTasks = tasks.filter(task => !task.complete);
-  const completeTasks = tasks.filter(task => task.complete);
+  const inProgressTasks = tasks.filter((task) => !task.complete);
+  const completedTasks = tasks.filter((task) => task.complete);
 
   return (
     <TaskListContainer>
       <Section>
-        <SectionTitle>In Progress</SectionTitle>
+        <SectionTitle>En cours</SectionTitle>
         <TaskGrid>
-          {incompleteTasks.map(task => (
+          {inProgressTasks.map((task) => (
             <TaskCard key={task._id}>
               <TaskTitle>{task.title}</TaskTitle>
               <TaskDescription>{task.description}</TaskDescription>
               <TaskDates>
-                <div>Start: {new Date(task.date_debut).toLocaleDateString()}</div>
-                <div>End: {new Date(task.date_fin).toLocaleDateString()}</div>
+                <DateItem>
+                  Créée le {new Date(task.createdAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </DateItem>
+                <DateItem>
+                  Échéance le {new Date(task.date_fin).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })} à {new Date(task.date_fin).toLocaleTimeString('fr-FR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </DateItem>
               </TaskDates>
               <ButtonGroup>
-                <CompleteButton onClick={() => handleComplete(task._id)}>
-                  Complete
-                </CompleteButton>
-                <DeleteButton onClick={() => handleDelete(task._id)}>
-                  Delete
-                </DeleteButton>
+                <Button className="complete" onClick={() => handleComplete(task._id)}>
+                  Terminer
+                </Button>
+                <Button className="delete" onClick={() => handleDelete(task._id)}>
+                  Supprimer
+                </Button>
               </ButtonGroup>
             </TaskCard>
           ))}
@@ -194,20 +261,32 @@ const TaskList = ({ tasks, onTaskUpdated }) => {
       </Section>
 
       <Section>
-        <SectionTitle>Completed</SectionTitle>
+        <SectionTitle>Terminées</SectionTitle>
         <TaskGrid>
-          {completeTasks.map(task => (
+          {completedTasks.map((task) => (
             <TaskCard key={task._id}>
               <TaskTitle>{task.title}</TaskTitle>
               <TaskDescription>{task.description}</TaskDescription>
               <TaskDates>
-                <div>Start: {new Date(task.date_debut).toLocaleDateString()}</div>
-                <div>End: {new Date(task.date_fin).toLocaleDateString()}</div>
+                <DateItem>
+                  Créée le {new Date(task.createdAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </DateItem>
+                <DateItem>
+                  Terminée le {new Date(task.completedAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </DateItem>
               </TaskDates>
               <ButtonGroup>
-                <DeleteButton onClick={() => handleDelete(task._id)}>
-                  Delete
-                </DeleteButton>
+                <Button className="delete" onClick={() => handleDelete(task._id)}>
+                  Supprimer
+                </Button>
               </ButtonGroup>
             </TaskCard>
           ))}

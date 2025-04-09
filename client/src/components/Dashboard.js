@@ -7,9 +7,10 @@ import TaskList from './TaskList';
 import { toast } from 'react-toastify';
 
 const DashboardContainer = styled.div`
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh;
 `;
 
 const Header = styled.div`
@@ -20,12 +21,29 @@ const Header = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 3.5rem;
-  background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+  font-size: 4rem;
+  margin-bottom: 3rem;
+  background: linear-gradient(45deg, #ff6b35, #ff9f1c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
-  margin: 0;
+  text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+  letter-spacing: 2px;
+  font-weight: 800;
+  position: relative;
+  text-align: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b35, #ff9f1c);
+    border-radius: 2px;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+  }
 `;
 
 const LogoutButton = styled.button`
@@ -46,13 +64,27 @@ const LogoutButton = styled.button`
 
 const Content = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 400px 1fr;
   gap: 2rem;
   min-height: 600px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     grid-template-columns: 1fr;
   }
+`;
+
+const FormSection = styled.div`
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+`;
+
+const TasksSection = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const Dashboard = () => {
@@ -96,8 +128,12 @@ const Dashboard = () => {
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </Header>
       <Content>
-        <TaskForm onTaskAdded={fetchTasks} />
-        <TaskList tasks={tasks} onTaskUpdated={fetchTasks} />
+        <FormSection>
+          <TaskForm onTaskAdded={fetchTasks} />
+        </FormSection>
+        <TasksSection>
+          <TaskList tasks={tasks} onTaskUpdated={fetchTasks} />
+        </TasksSection>
       </Content>
     </DashboardContainer>
   );
