@@ -7,6 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'junit',
+  outputDir: './playwright-report',
   use: {
     baseURL: 'https://to-scooby-do-b1b9c.web.app',
     trace: 'on-first-retry',
