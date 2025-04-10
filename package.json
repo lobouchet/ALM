@@ -1,0 +1,11 @@
+{
+  "name": "todo-app-tests",
+  "version": "1.0.0",
+  "description": "Tests for Todo App",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1"
+  }
+} 
