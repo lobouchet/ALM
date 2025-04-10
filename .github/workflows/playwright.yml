@@ -2,11 +2,11 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - 'ALM/**'
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - 'ALM/**'
 
