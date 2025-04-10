@@ -11,7 +11,7 @@ export default defineConfig({
   use: {
     baseURL: 'https://to-scooby-do-b1b9c.web.app',
     trace: 'on-first-retry',
-    headless: false,
+    headless: true,
   },
   projects: [
     {
