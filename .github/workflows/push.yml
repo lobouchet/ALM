@@ -26,8 +26,11 @@ jobs:
         run: npx playwright install --with-deps
       - name: Start server and run tests
         run: |
+          # Démarrer le serveur en arrière-plan
           npm run start &
-          sleep 10
+          # Attendre que le serveur soit prêt
+          npx wait-on http://localhost:3000
+          # Exécuter les tests
           npx playwright test
         env:
           CI: true
