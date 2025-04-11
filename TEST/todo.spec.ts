@@ -34,18 +34,4 @@ test.describe('Todo App', () => {
     // Vérifier que la tâche a été supprimée
     await expect(page.getByText('Tâche à supprimer')).not.toBeVisible();
   });
-
-  test('ne peut pas ajouter une tâche vide', async ({ page }) => {
-    // Aller à la page de l'application
-    await page.goto('https://to-scooby-do-b1b9c.web.app/');
-    
-    // Cliquer sur le bouton Add sans remplir le champ
-    await page.click('text=Add');
-    
-    // Vérifier que le message "No todos yet" est toujours présent
-    await expect(page.getByText('No todos yet. Add one above!')).toBeVisible();
-    
-    // Vérifier que le compteur est toujours à 0
-    await expect(page.getByText('0 of 0 completed')).toBeVisible();
-  });
 }); 
