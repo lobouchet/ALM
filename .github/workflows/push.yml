@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
@@ -39,16 +39,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
+      - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TO_SCOOBY_DO_B1B9C }}
           projectId: to-scooby-do-b1b9c
+          channelId: preview-${{ github.event.pull_request.number }}
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
-    defaults:
-      run:
-        working-directory: hosting
 
   firebase_deploy:
     name: Firebase Hosting Deploy (on merge to master)
@@ -58,6 +57,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
+      - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
@@ -66,6 +66,3 @@ jobs:
           projectId: to-scooby-do-b1b9c
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
-    defaults:
-      run:
-        working-directory: app
