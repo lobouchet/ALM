@@ -6,10 +6,12 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'junit',
+  reporter: 'html',
   outputDir: './playwright-report',
   use: {
-    baseURL: 'https://to-scooby-do-b1b9c.web.app',
+    baseURL: process.env.CI 
+      ? 'https://to-scooby-do-b1b9c.web.app'
+      : 'http://localhost:3000',
     trace: 'on-first-retry',
     headless: true,
   },
@@ -19,6 +21,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
+  webServer: process.env.CI ? undefined : {
+    command: 'npm run dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: true,
+  },
 }); 
 
 // testt
