@@ -9,7 +9,32 @@ on:
       - master
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Start server and run tests
+        run: |
+          # Démarrer le serveur en arrière-plan
+          npm run start &
+          # Attendre 30 secondes que le serveur soit prêt
+          sleep 30
+          # Exécuter les tests
+          npx playwright test
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
